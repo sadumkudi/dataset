@@ -1,39 +1,37 @@
-from unittest import TestCase, mock
-from django.test import TestCase as DjangoTestCase
-from somewhere import your_function, get_access_token, check_token_expiry, decode_api_call
+from django.test import TestCase
+import jwt
+from .views import decode_jwt_token  # Adjust the import according to your project structure
 
-class TestJWTDecoder(DjangoTestCase):
-    @mock.patch('somewhere.get_access_token')
-    @mock.patch('somewhere.check_token_expiry')
-    @mock.patch('somewhere.decode_api_call')
-    def test_jwt_decoder(self, mock_decode_api_call, mock_check_token_expiry, mock_get_access_token):
-        # Setup mock return values
-        mock_get_access_token.return_value = 'mocked_access_token'
-        mock_check_token_expiry.return_value = True
-        mock_decode_api_call.return_value = {'user_id': '123', 'role': 'admin'}
+class DecodeJWTTokenTests(TestCase):
 
-        # Call the function under test
-        result = your_function('jwt_token_here')
+    def setUp(self):
+        # This token is crafted for the purpose of testing
+        self.jwt_token = jwt.encode({
+            'sub': '1234567890',
+            'aud': 'your-audience',
+            'scope': 'read:messages'
+        }, 'secret', algorithm='HS256')
 
-        # Assertions to check if the function behaves as expected
-        mock_get_access_token.assert_called_once()
-        mock_check_token_expiry.assert_called_once_with('mocked_access_token')
-        mock_decode_api_call.assert_called_once_with('jwt_token_here', 'mocked_access_token')
-        self.assertEqual(result, {'user_id': '123', 'role': 'admin'})
+    def test_decode_jwt_token(self):
+        """ Test that the JWT token is decoded correctly. """
+        decoded_data = decode_jwt_token(self.jwt_token)
+        self.assertEqual(decoded_data['sub'], '1234567890')
+        self.assertEqual(decoded_data['aud'], 'your-audience')
+        self.assertEqual(decoded_data['scope'], 'read:messages')
 
-    @mock.patch('somewhere.get_access_token')
-    @mock.patch('somewhere.check_token_expiry')
-    @mock.patch('somewhere.decode_api_call')
-    def test_jwt_decoder_with_expired_token(self, mock_decode_api_call, mock_check_token_expiry, mock_get_access_token):
-        # Setup mock return values for expired token scenario
-        mock_get_access_token.return_value = 'mocked_access_token'
-        mock_check_token_expiry.return_value = False  # Simulate expired token
+    def test_decode_jwt_token_with_missing_fields(self):
+        """ Test decoding a JWT with some fields missing. """
+        # Creating a JWT with a missing 'aud' field
+        incomplete_jwt_token = jwt.encode({
+            'sub': '1234567890',
+            'scope': 'read:messages'
+        }, 'secret', algorithm='HS256')
 
-        # Expecting some handling of expired token, maybe refresh or error
-        with self.assertRaises(SomeException):  # Replace SomeException with your actual exception
-            your_function('jwt_token_here')
+        with self.assertRaises(KeyError):
+            decode_jwt_token(incomplete_jwt_token)
 
-        # Verify behavior with expired token
-        mock_get_access_token.assert_called_once()
-        mock_check_token_expiry.assert_called_once_with('mocked_access_token')
-        mock_decode_api_call.assert_not_called()  # Should not call decode if token is expired
+    def test_decode_jwt_token_invalid(self):
+        """ Test the function with an invalid token. """
+        invalid_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.HokynJmnx_8LX9NB_fvhegadLldoDLAIdZ5o9EVGsQg'
+        decoded_data = decode_jwt_token(invalid_token)
+        self.assertEqual(decoded_data, {})
