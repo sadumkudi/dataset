@@ -1,1 +1,3 @@
 openssl x509 -inform der -in certificate.cer -out certificate.crt
+
+python manage.py dumpdata --exclude auth.permission --exclude contenttypes > dump.json
