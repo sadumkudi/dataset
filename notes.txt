@@ -7,3 +7,8 @@ python manage.py dumpdata --database sqlite --natural-foreign --natural-primary 
 python manage.py dumpdata --format=json --output=backupdata.json --encoding=utf-8
 
 python manage.py dumpdata — natural-foreign — natural-primary > whole.json
+
+
+from django.db.models import F
+
+YourModel.objects.annotate(new_input_params=F('input_params')).filter(new_input_params__has_key='utf8').update(new_input_params__utf8='')
