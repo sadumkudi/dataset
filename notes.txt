@@ -3,3 +3,6 @@ openssl x509 -inform der -in certificate.cer -out certificate.crt
 python manage.py dumpdata --exclude auth.permission --exclude contenttypes > dump.json
 
 python manage.py dumpdata --database sqlite --natural-foreign --natural-primary > sqlite-dump.json
+
+python manage.py dumpdata --format=json --output=backupdata.json --encoding=utf-8
+
