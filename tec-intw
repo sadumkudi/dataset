@@ -1,0 +1,23 @@
+Introduction:
+
+"Thank you for taking the time to interview with us today. We are looking for a lead software engineer with extensive experience in Python, Django, and API development. This role is crucial for our team as we are currently working on a significant project that involves building an API gateway to automate the provisioning of network resources across various applications.
+
+Our API gateway serves as a central point to manage and automate network resource provisioning. It interfaces with multiple applications and systems, ensuring seamless communication and integration. The goal is to streamline operations, improve efficiency, and reduce manual intervention.
+
+Requirements:
+
+Technical Expertise: We need someone with strong skills in Python and Django for back-end development. Experience with RESTful API design and development is essential.
+API Gateway Knowledge: Understanding of API gateway concepts, including authentication, rate limiting, and request routing.
+Network Automation: Experience or familiarity with automating network resources, possibly involving technologies like Infoblox.
+Leadership Skills: As a lead engineer, you will be guiding a team, making architectural decisions, and ensuring best practices are followed.
+Problem-Solving: Ability to troubleshoot complex issues, optimize performance, and ensure the reliability and scalability of our systems.
+Project Overview:
+
+Our current project involves creating an API gateway that connects to various applications. The primary objective is to automate the provisioning of network resources, such as IP addresses and DNS records. We are focusing on making the process more efficient and error-free by minimizing manual interventions.
+
+The API gateway will handle requests from different applications, authenticate them, and route them to the appropriate services. It will also manage rate limiting to prevent abuse and ensure the system's stability. One of the key integrations is with Infoblox, which will be used for managing network resources.
+
+We are excited about this project and believe it has the potential to significantly improve our operations. We're looking for someone who can bring their expertise to help us achieve these goals and drive the project forward.
+
+Now, let's dive into some technical questions to get a better understanding of your experience and how you approach problems."
+
